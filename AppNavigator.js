@@ -2,12 +2,12 @@ import React from 'react';
 import ReviewScreen from "./screens/ReviewScreen";
 import WelcomeScreen from "./screens/WelcomeScreen";
 import DeckScreen from "./screens/DeckScreen";
-import {Platform} from "react-native";
-import {createBottomTabNavigator, createStackNavigator} from "react-navigation";
+import { Platform } from "react-native";
+import { createBottomTabNavigator, createStackNavigator } from "react-navigation";
 import AuthScreen from "./screens/AuthScreen";
 import SettingScreen from "./screens/SettingScreen";
 import MapScreen from "./screens/MapScreen";
-
+import { Button, Icon } from 'react-native-elements';
 
 
 export const AppNavigator = createBottomTabNavigator({
@@ -15,8 +15,28 @@ export const AppNavigator = createBottomTabNavigator({
     auth: AuthScreen,
     main: {
         screen: createBottomTabNavigator({
-            map: MapScreen,
-            deck: DeckScreen,
+            map: {
+                screen: MapScreen,
+                navigationOptions: {
+                    tabBarLabel: 'Map',
+                    tabBarIcon: ({ tintColor, focused }) => {
+                        return (
+                            <Icon name="my-location" size={30} color={tintColor}/>
+                        );
+                    },
+                }
+            },
+            deck: {
+                screen: DeckScreen,
+                navigationOptions: {
+                    tabBarLabel: 'Deck',
+                    tabBarIcon: ({ tintColor, focused }) => {
+                        return (
+                            <Icon name="description" size={30} color={tintColor}/>
+                        );
+                    },
+                }
+            },
             review1: {
                 screen: createStackNavigator({
                     review: {
@@ -38,8 +58,27 @@ export const AppNavigator = createBottomTabNavigator({
                     },
                     settings: {
                         screen: SettingScreen,
+                        navigationOptions: ({ navigation }) => {
+                            header: {
+                                style: {
+                                    marginTop: Platform.OS === 'android' ? 24 : 0
+                                }
+                            }
+                        }
                     }
-                })
+                }),
+                navigationOptions: {
+                    tabBarLabel: 'Review',
+                    tabBarIcon: ({ tintColor, focused }) => {
+                        return (
+                            <Icon name="favorite" size={30} color={tintColor}/>
+                        );
+                    },
+                }
+            }
+        },{
+            tabBarOptions: {
+                labelStyle: { fontSize: 12 }
             }
         })
     }
